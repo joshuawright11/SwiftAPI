@@ -1,9 +1,17 @@
+public struct Empty: Codable {
+    public static let empty = Empty()
+}
+
+open class APIGroup {
+    public init() {}
+}
+
 public struct Endpoint<Req: Codable, Res: Codable> {
     public var path: String
     public var method: HTTPMethod
 }
 
-public enum HTTPMethod {
+public enum HTTPMethod: String {
     case post, put, get, delete, patch
 }
 
@@ -47,7 +55,7 @@ public class PUT<Req: Codable, Res: Codable>: Method<Req, Res> {
 }
 
 @propertyWrapper
-class PATCH<Req: Codable, Res: Codable>: Method<Req, Res> {
+public class PATCH<Req: Codable, Res: Codable>: Method<Req, Res> {
     // https://forums.swift.org/t/is-it-allowed-to-inherit-a-property-wrapper-class/28695
     public override var wrappedValue: Endpoint<Req, Res> { didSet {} }
 
@@ -57,7 +65,7 @@ class PATCH<Req: Codable, Res: Codable>: Method<Req, Res> {
 }
 
 @propertyWrapper
-class DELETE<Req: Codable, Res: Codable>: Method<Req, Res> {
+public class DELETE<Req: Codable, Res: Codable>: Method<Req, Res> {
     // https://forums.swift.org/t/is-it-allowed-to-inherit-a-property-wrapper-class/28695
     public override var wrappedValue: Endpoint<Req, Res> { didSet {} }
 

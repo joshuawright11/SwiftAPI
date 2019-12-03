@@ -1,26 +1,9 @@
-public struct Empty: Codable {
-    public static let empty = Empty()
-}
-
-open class APIGroup {
-    public init() {}
-}
-
-public struct Endpoint<Req: Codable, Res: Codable> {
-    public var path: String
-    public var method: HTTPMethod
-}
-
-public enum HTTPMethod: String {
-    case post, put, get, delete, patch
-}
-
 @propertyWrapper
 public class Method<Req: Codable, Res: Codable> {
     public var wrappedValue: Endpoint<Req, Res>
 
     init(_ method: HTTPMethod, _ path: String) {
-        self.wrappedValue = Endpoint<Req, Res>(path: path, method: method)
+        self.wrappedValue = Endpoint<Req, Res>(method: method, path: path)
     }
 }
 

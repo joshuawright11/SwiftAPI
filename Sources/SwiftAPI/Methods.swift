@@ -1,5 +1,5 @@
 @propertyWrapper
-public class Method<Req: Codable, Res: Codable> {
+public class Method<Req, Res: Codable> {
     public var wrappedValue: Endpoint<Req, Res>
 
     init(_ method: HTTPMethod, _ path: String) {
@@ -18,7 +18,7 @@ public class GET<Req: Codable, Res: Codable>: Method<Req, Res> {
 }
 
 @propertyWrapper
-public class POST<Req: Codable, Res: Codable>: Method<Req, Res> {
+public class POST<Req, Res: Codable>: Method<Req, Res> {
     // https://forums.swift.org/t/is-it-allowed-to-inherit-a-property-wrapper-class/28695
     public override var wrappedValue: Endpoint<Req, Res> { didSet {} }
 

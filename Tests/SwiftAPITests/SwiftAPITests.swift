@@ -12,21 +12,3 @@ final class SwiftAPITests: XCTestCase {
         ("testExample", testExample),
     ]
 }
-
-struct PetsAPI {
-    @POST("v1/dda/:user_id:")
-    var create: Endpoint<CreatePetRequest, Pet>
-}
-
-struct CreatePetRequest: Codable {
-    @Path("user_id")  var userID: String = ""
-    @Header("header") var header: String = ""
-    @Query("sorted")  var query: String = ""
-    
-    @Body var pet: Pet
-}
-
-struct Pet: Codable {
-    var id: String?
-    var name: String
-}

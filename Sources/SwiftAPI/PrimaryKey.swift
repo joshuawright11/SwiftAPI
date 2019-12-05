@@ -20,8 +20,8 @@ public struct User: Codable, Authable, PKIdentifiable {
     var hashedPassword: String
 
     func test() {
-        let user = User(id: "", username: "", hashedPassword: "")
-        let rem = Reminder(userID: user.pk, name: "yeet", isComplete: true)
+//        let user = User(id: "", username: "", hashedPassword: "")
+//        let rem = Reminder(userID: user.pk, name: "yeet", isComplete: true)
     }
 }
 

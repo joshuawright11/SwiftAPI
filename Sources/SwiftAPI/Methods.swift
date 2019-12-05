@@ -8,7 +8,7 @@ public class Method<Req, Res: Codable> {
 }
 
 @propertyWrapper
-public class GET<Req: Codable, Res: Codable>: Method<Req, Res> {
+public class GET<Req, Res: Codable>: Method<Req, Res> {
     // https://forums.swift.org/t/is-it-allowed-to-inherit-a-property-wrapper-class/28695
     public override var wrappedValue: Endpoint<Req, Res> { didSet {} }
     
@@ -28,7 +28,7 @@ public class POST<Req, Res: Codable>: Method<Req, Res> {
 }
 
 @propertyWrapper
-public class PUT<Req: Codable, Res: Codable>: Method<Req, Res> {
+public class PUT<Req, Res: Codable>: Method<Req, Res> {
     // https://forums.swift.org/t/is-it-allowed-to-inherit-a-property-wrapper-class/28695
     public override var wrappedValue: Endpoint<Req, Res> { didSet {} }
 
@@ -38,7 +38,7 @@ public class PUT<Req: Codable, Res: Codable>: Method<Req, Res> {
 }
 
 @propertyWrapper
-public class PATCH<Req: Codable, Res: Codable>: Method<Req, Res> {
+public class PATCH<Req, Res: Codable>: Method<Req, Res> {
     // https://forums.swift.org/t/is-it-allowed-to-inherit-a-property-wrapper-class/28695
     public override var wrappedValue: Endpoint<Req, Res> { didSet {} }
 
@@ -48,7 +48,7 @@ public class PATCH<Req: Codable, Res: Codable>: Method<Req, Res> {
 }
 
 @propertyWrapper
-public class DELETE<Req: Codable, Res: Codable>: Method<Req, Res> {
+public class DELETE<Req, Res: Codable>: Method<Req, Res> {
     // https://forums.swift.org/t/is-it-allowed-to-inherit-a-property-wrapper-class/28695
     public override var wrappedValue: Endpoint<Req, Res> { didSet {} }
 

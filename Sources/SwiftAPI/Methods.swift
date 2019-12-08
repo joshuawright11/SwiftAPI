@@ -1,3 +1,5 @@
+import Foundation
+
 @propertyWrapper
 public class Method<Req, Res: Codable> {
     public var wrappedValue: Endpoint<Req, Res>
@@ -23,7 +25,7 @@ public class POST<Req, Res: Codable>: Method<Req, Res> {
     public override var wrappedValue: Endpoint<Req, Res> { didSet {} }
 
     public init(_ path: String) {
-        super.init(.get, path)
+        super.init(.post, path)
     }
 }
 
@@ -33,7 +35,7 @@ public class PUT<Req, Res: Codable>: Method<Req, Res> {
     public override var wrappedValue: Endpoint<Req, Res> { didSet {} }
 
     public init(_ path: String) {
-        super.init(.get, path)
+        super.init(.put, path)
     }
 }
 
@@ -43,7 +45,7 @@ public class PATCH<Req, Res: Codable>: Method<Req, Res> {
     public override var wrappedValue: Endpoint<Req, Res> { didSet {} }
 
     public init(_ path: String) {
-        super.init(.get, path)
+        super.init(.patch, path)
     }
 }
 
@@ -53,6 +55,6 @@ public class DELETE<Req, Res: Codable>: Method<Req, Res> {
     public override var wrappedValue: Endpoint<Req, Res> { didSet {} }
 
     public init(_ path: String) {
-        super.init(.get, path)
+        super.init(.delete, path)
     }
 }

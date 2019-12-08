@@ -1,1 +1,1 @@
-public struct Empty {}
+public struct Empty: Codable {}

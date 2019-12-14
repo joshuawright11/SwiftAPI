@@ -19,7 +19,9 @@ public extension Endpoint {
         }
         
         // Then, attempt to load request params out
-        this.body = try (req as? BodyLoadable)?.getBodyData()
+        if let req = req as? BodyLoadable {
+            this.body = try req.getBodyData()
+        }
         if let req = req as? HeaderLoadable {
             this.headers = try req.getHeaderDict()
         }

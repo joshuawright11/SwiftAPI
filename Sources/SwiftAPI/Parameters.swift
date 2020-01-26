@@ -89,12 +89,18 @@ public protocol Query: QueryLoadable {
 }
 
 extension Query {
-    public func getQueryDict() throws -> [String : String] {
-        guard let dict = query.dictionary as? [String: String] else {
-            throw EncodingError(info: "All query properties must be strings")
+    public func getQueryDict() throws -> [String: String] {
+        var params: [String: String] = [:]
+        for (key, val) in query.dictionary {
+            if let val = val as? Array<String> {
+                params[key] = val.joined(separator: ",")
+            } else if let val = val as? String {
+                params[key] = val
+            } else {
+                throw EncodingError(info: "All query properties must be strings. \(query.dictionary)")
+            }
         }
-        
-        return dict
+        return params
     }
 }
 

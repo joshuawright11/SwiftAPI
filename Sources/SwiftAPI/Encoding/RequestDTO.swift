@@ -18,6 +18,10 @@ public struct RequestParameters {
     public let headers: [String: String]
     public let fullURL: String
     public let body: Data?
+    
+    public static func just(url: String, method: HTTPMethod) -> RequestParameters {
+        RequestParameters(method: method, headers: [:], fullURL: url, body: nil)
+    }
 }
 
 struct EncodingHelper {

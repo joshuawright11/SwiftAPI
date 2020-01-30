@@ -3,5 +3,6 @@ import XCTest
 import SwiftAPITests
 
 var tests = [XCTestCaseEntry]()
-tests += SwiftAPITests.allTests()
+tests += DecodingTests.allTests()
+tests += EncodingTests.allTests()
 XCTMain(tests)

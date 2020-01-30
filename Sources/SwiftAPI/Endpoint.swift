@@ -3,6 +3,7 @@ import Foundation
 public struct Endpoint<Req, Res: Codable> {
     public let method: HTTPMethod
     public var path: String
+
     public var body: Data?
     public var pathParams: [String: String] = [:]
     public var headers: [String: String] = [:]
@@ -14,7 +15,7 @@ public extension Endpoint {
         var this = self
         
         // First, check to see if it's an empty
-        guard !(req is Empty) else {
+        guard !(req is Void) else {
             return this
         }
         

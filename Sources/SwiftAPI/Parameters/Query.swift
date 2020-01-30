@@ -2,7 +2,7 @@ protocol AnyQuery {
     var value: Any { get }
 }
 
-@propertyWrapper struct _Query<T>: AnyQuery {
+@propertyWrapper struct Query<T>: AnyQuery {
     var wrappedValue: T
     var value: Any { wrappedValue }
 }

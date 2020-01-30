@@ -4,7 +4,7 @@ protocol AnyBody {
     func toData() throws -> Data
 }
 
-@propertyWrapper struct _Body<Value: Codable>: AnyBody {
+@propertyWrapper struct Body<Value: Codable>: AnyBody {
     var wrappedValue: Value
 
     func toData() throws -> Data {

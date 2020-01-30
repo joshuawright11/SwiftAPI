@@ -2,18 +2,18 @@ protocol RequestDecodable {
     init(from: RequestDecoder) throws
 }
 
-protocol RequestDecoder {
-    func header(for key: String) throws -> String
-    func query<T: Any>(for key: String) throws -> T
-    func body<T: Decodable>() throws -> T
-    func pathComponent(for key: String) throws -> String
-}
-
 protocol RequestDecoderProvider {
     func headers() -> [String: String]
     func pathComponents() -> [String: String]
     func body<T: Decodable>() throws -> T
     func queryDict() -> [String: Any]
+}
+
+protocol RequestDecoder {
+    func header(for key: String) throws -> String
+    func query<T: Any>(for key: String) throws -> T
+    func body<T: Decodable>() throws -> T
+    func pathComponent(for key: String) throws -> String
 }
 
 extension RequestDecoder {

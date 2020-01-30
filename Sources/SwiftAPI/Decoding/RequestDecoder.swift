@@ -1,7 +1,9 @@
+/// Implement this for models you want to decode.
 protocol RequestDecodable {
     init(from: RequestDecoder) throws
 }
 
+/// Implement this on the server side.
 protocol RequestDecoderProvider {
     func headers() -> [String: String]
     func pathComponents() -> [String: String]

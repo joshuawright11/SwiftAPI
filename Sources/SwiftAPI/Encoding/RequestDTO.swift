@@ -1,26 +1,32 @@
 import Foundation
 
-protocol RequestEncodable {
-    func encode(to encoder: RequestEncoder, basePath: String, method: HTTPMethod) throws
+/// Conform your request objects to this.
+public protocol RequestDTO {
+    func parameters(baseURL: String, method: HTTPMethod) throws -> RequestParameters
 }
 
-extension RequestEncodable {
-    func encode(to encoder: RequestEncoder, basePath: String, method: HTTPMethod) throws {
+public extension RequestDTO {
+    func parameters(baseURL: String, method: HTTPMethod) throws -> RequestParameters {
         let helper = EncodingHelper(self)
-        encoder.setMethod(method)
-        encoder.setPath(try helper.getFullPath(basePath))
-        encoder.setHeaders(helper.getHeaders())
-        encoder.setBody(try helper.getBody())
+        return RequestParameters(method: method, headers: helper.getHeaders(),
+                                 fullURL: try helper.getFullURL(baseURL), body: try helper.getBody())
     }
 }
 
-struct EncodingHelper {
-    var bodies: [String: AnyBody] = [:]
-    var headers: [String: AnyHeader] = [:]
-    var queries: [String: AnyQuery] = [:]
-    var paths: [String: AnyPath] = [:]
+public struct RequestParameters {
+    public let method: HTTPMethod
+    public let headers: [String: String]
+    public let fullURL: String
+    public let body: Data?
+}
 
-    init<T>(_ value: T) {
+struct EncodingHelper {
+    private var bodies: [String: AnyBody] = [:]
+    private var headers: [String: AnyHeader] = [:]
+    private var queries: [String: AnyQuery] = [:]
+    private var paths: [String: AnyPath] = [:]
+
+    fileprivate init<T>(_ value: T) {
         Mirror(reflecting: value)
             .children
             .forEach { child in
@@ -41,8 +47,8 @@ struct EncodingHelper {
             }
     }
 
-    func getFullPath(_ basePath: String) throws -> String {
-        try self.replacedPath(basePath) + self.queryString()
+    func getFullURL(_ baseURL: String) throws -> String {
+        try self.replacedPath(baseURL) + self.queryString()
     }
 
     private func replacedPath(_ basePath: String) throws -> String {

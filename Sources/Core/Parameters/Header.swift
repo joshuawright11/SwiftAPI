@@ -2,7 +2,9 @@ protocol AnyHeader {
     var value: String { get }
 }
 
-@propertyWrapper struct Header: AnyHeader {
-    var wrappedValue: String
+@propertyWrapper
+public struct Header: AnyHeader {
+    public var wrappedValue: String
     var value: String { wrappedValue }
+    public init(wrappedValue: String) { self.wrappedValue = wrappedValue }
 }

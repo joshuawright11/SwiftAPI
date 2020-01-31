@@ -1,26 +1,22 @@
 import Foundation
 
 /// Conform your request objects to this.
-public protocol RequestDTO {
-    func parameters(baseURL: String, method: HTTPMethod) throws -> RequestParameters
-}
-
-public extension RequestDTO {
-    func parameters(baseURL: String, method: HTTPMethod) throws -> RequestParameters {
-        let helper = EncodingHelper(self)
-        return RequestParameters(method: method, headers: helper.getHeaders(),
-                                 fullURL: try helper.getFullURL(baseURL), body: try helper.getBody())
+public extension Endpoint {
+    func parameters(dto: Req) throws -> RequestParameters {
+        let helper = EncodingHelper(dto)
+        return RequestParameters(method: self.method, headers: helper.getHeaders(),
+                                 fullPath: try helper.getFullPath(self.basePath), body: try helper.getBody())
     }
 }
 
 public struct RequestParameters {
     public let method: HTTPMethod
     public let headers: [String: String]
-    public let fullURL: String
+    public let fullPath: String
     public let body: Data?
     
     public static func just(url: String, method: HTTPMethod) -> RequestParameters {
-        RequestParameters(method: method, headers: [:], fullURL: url, body: nil)
+        RequestParameters(method: method, headers: [:], fullPath: url, body: nil)
     }
 }
 
@@ -51,8 +47,8 @@ struct EncodingHelper {
             }
     }
 
-    func getFullURL(_ baseURL: String) throws -> String {
-        try self.replacedPath(baseURL) + self.queryString()
+    func getFullPath(_ basePath: String) throws -> String {
+        try self.replacedPath(basePath) + self.queryString()
     }
 
     private func replacedPath(_ basePath: String) throws -> String {
@@ -71,7 +67,7 @@ struct EncodingHelper {
             .reduce(into: []) { list, query in
                 list += self.queryComponents(fromKey: query.key, value: query.value.value)
             }
-            .map { "\($0)=\($1)" }
+            .map { "\($0)" + ($1.isEmpty ? "" : "=\($1)") }
             .joined(separator: "&")
     }
 

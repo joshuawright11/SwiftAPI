@@ -4,8 +4,10 @@ protocol AnyBody {
     func toData() throws -> Data
 }
 
-@propertyWrapper struct Body<Value: Codable>: AnyBody {
-    var wrappedValue: Value
+@propertyWrapper
+public struct Body<Value: Codable>: AnyBody {
+    public var wrappedValue: Value
+    public init(wrappedValue: Value) { self.wrappedValue = wrappedValue }
 
     func toData() throws -> Data {
         try wrappedValue.toData()

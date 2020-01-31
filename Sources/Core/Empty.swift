@@ -1,1 +1,1 @@
-public struct Empty: Codable, RequestDTO { public init() {} }
+public struct Empty: Codable { public init() {} }

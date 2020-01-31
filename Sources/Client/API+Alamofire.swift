@@ -19,8 +19,8 @@ extension API {
     
     /// Request an endpoint with a non-empty Response & Request type.
     public func request<Req, Res>(_ endpoint: Endpoint<Req, Res>, _ req: Req) throws -> DataRequest {
-        let requestParameters = try req.parameters(baseURL: self.baseURL, method: endpoint.method)
-        return self.session.request(requestParameters.fullURL,
+        let requestParameters = try endpoint.parameters(dto: req)
+        return self.session.request(self.baseURL + requestParameters.fullPath,
                                     method: requestParameters.method.af,
                                     parameters: requestParameters.body,
                                     encoder: AFDataEncoder.shared,

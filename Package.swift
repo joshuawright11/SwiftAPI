@@ -16,9 +16,12 @@ let package = Package(
         .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.0.0-rc.3"),
     ],
     targets: [
+        /// Main targets
         .target(name: "SwiftAPI", dependencies: [], path: "Sources/Core"),
         .target(name: "SwiftAPIClient", dependencies: ["Alamofire", "SwiftAPI"], path: "Sources/Client"),
         .target(name: "SwiftAPIVapor", dependencies: ["Vapor", "SwiftAPI"], path: "Sources/Vapor"),
+
+        /// Test targets
         .testTarget(name: "SwiftAPITests", dependencies: ["SwiftAPI"]),
     ]
 )

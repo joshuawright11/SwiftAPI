@@ -27,6 +27,10 @@ struct EncodingHelper {
     private var paths: [String: AnyPath] = [:]
 
     fileprivate init<T>(_ value: T) {
+        if let value = value as? Encodable {
+            self.bodies["body"] = ErasedBody(encodable: value)
+            return
+        }
         Mirror(reflecting: value)
             .children
             .forEach { child in

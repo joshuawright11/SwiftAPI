@@ -4,6 +4,14 @@ protocol AnyBody {
     func toData() throws -> Data
 }
 
+struct ErasedBody: AnyBody {
+    let encodable: Encodable
+
+    func toData() throws -> Data {
+        try self.encodable.toData()
+    }
+}
+
 @propertyWrapper
 public struct Body<Value: Codable>: AnyBody {
     public var wrappedValue: Value

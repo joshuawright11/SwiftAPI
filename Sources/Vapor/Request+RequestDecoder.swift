@@ -8,14 +8,12 @@ extension Request: RequestDecoder {
             .unwrap(or: SwiftAPIError(message: "Expected `\(key)` in the request headers."))
     }
     
-    public func query<T>(for key: String) throws -> T {
-        let value = try self.query.get(String.self, at: key)
-        
-        guard let castValue = value as? T else {
-            throw SwiftAPIError(message: "Found `\(key)` in the request query, but it was of type `\(type(of: value))` instead of expected type `\(T.self)`.")
+    public func query<T: Decodable>(for key: String) throws -> T {
+        do {
+            return try self.query.get(T.self, at: key)
+        } catch {
+            throw SwiftAPIError(message: "Encountered an error getting `\(key)` from the request query. \(error).")
         }
-
-        return castValue
     }
     
     public func pathComponent(for key: String) throws -> String {

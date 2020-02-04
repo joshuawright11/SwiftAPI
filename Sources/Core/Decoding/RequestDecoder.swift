@@ -6,7 +6,7 @@ public protocol RequestLoadable {
 /// Implement this on the server side.
 public protocol RequestDecoder {
     func header(for key: String) throws -> String
-    func query<T: Any>(for key: String) throws -> T
+    func query<T: Decodable>(for key: String) throws -> T
     func body<T: Decodable>() throws -> T
     func pathComponent(for key: String) throws -> String
 }

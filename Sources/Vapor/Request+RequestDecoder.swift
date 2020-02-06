@@ -17,11 +17,8 @@ extension Request: RequestDecoder {
     }
     
     public func pathComponent(for key: String) throws -> String {
-        do {
-            return try self.pathComponent(for: key)
-        } catch {
-            throw SwiftAPIError(message: "Expected `\(key)` in the request path components.")
-        }
+        return try self.parameters.get(key)
+            .unwrap(or: SwiftAPIError(message: "Expected `\(key)` in the request path components."))
     }
     
     public func body<T>() throws -> T where T : Decodable {

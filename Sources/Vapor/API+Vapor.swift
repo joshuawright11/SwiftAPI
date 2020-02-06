@@ -27,8 +27,9 @@ public struct API {
 
 private extension Request {
     func performRequest<Response: Codable>(baseURL: String, _ parameters: RequestParameters) -> EventLoopFuture<Response> {
-        self.client.send(parameters.method.nio, headers: HTTPHeaders(parameters.headers.map { $0 }),
-                         to: URI(string: parameters.fullPath))
+        let fullURL = baseURL + parameters.fullPath
+        return self.client.send(parameters.method.nio, headers: HTTPHeaders(parameters.headers.map { $0 }),
+                         to: URI(string: fullURL))
         {
             guard let data = parameters.body else {
                 return
@@ -40,7 +41,7 @@ private extension Request {
         }
         .flatMapThrowing { response in
             guard response.status.isSuccess else {
-                print("[SwiftAPIVapor] Error: Got status code `\(response.status.code)` hitting `\(parameters.fullPath)`. The response body was \(response.content).")
+                print("[SwiftAPIVapor] Error: Got status code `\(response.status.code)` hitting `\(fullURL)`. The response was \(response.description).")
                 throw Abort(response.status)
             }
             

@@ -1,6 +1,6 @@
 /// Implement this for models you want to decode.
 public protocol RequestLoadable {
-    init(from: RequestDecoder) throws
+    init(from decoder: RequestDecoder) throws
 }
 
 /// Implement this on the server side.

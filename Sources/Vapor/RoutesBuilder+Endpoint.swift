@@ -3,7 +3,7 @@ import Vapor
 
 extension Empty: Content {}
 
-public extension Application {
+public extension RoutesBuilder {
     /// Register an Endpoint.
     func register<Req, Res>(_ endpoint: Endpoint<Req, Res>,
                             use closure: @escaping (Request, Req) throws -> EventLoopFuture<Res>)

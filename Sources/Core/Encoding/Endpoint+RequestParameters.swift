@@ -44,7 +44,7 @@ struct EncodingHelper {
                 } else if let body = child.value as? AnyBody {
                     self.bodies[sanitizedLabel] = body
                 } else if let header = child.value as? AnyHeader {
-                    self.headers[sanitizedLabel] = header
+                    self.headers[header.keyOverride ?? sanitizedLabel] = header
                 } else if let path = child.value as? AnyPath {
                     self.paths[sanitizedLabel] = path
                 }

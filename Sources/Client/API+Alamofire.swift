@@ -22,8 +22,8 @@ extension API {
         let requestParameters = try endpoint.parameters(dto: req)
         return self.session.request(self.baseURL + requestParameters.fullPath,
                                     method: requestParameters.method.af,
-                                    parameters: requestParameters.body,
-                                    encoder: AFDataEncoder.shared,
+                                    parameters: requestParameters.body?.content,
+                                    encoder: JSONParameterEncoder.default,
                                     headers: HTTPHeaders(requestParameters.headers))
     }
 }

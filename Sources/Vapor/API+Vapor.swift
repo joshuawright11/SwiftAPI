@@ -11,24 +11,24 @@ public struct API {
         self.baseURL = baseURL
     }
     
-    public func request<Req, Res>(_ endpoint: Endpoint<Req, Res>, _ dto: Req, _ request: Request) throws
+    public func request<Req, Res>(_ endpoint: Endpoint<Req, Res>, _ dto: Req, _ client: Client) throws
         -> EventLoopFuture<(content: Res, response: ClientResponse)>
     {
         let parameters = try endpoint.parameters(dto: dto)
-        return request.performRequest(baseURL: self.baseURL, parameters)
+        return client.performRequest(baseURL: self.baseURL, parameters)
     }
     
-    public func request<Res>(_ endpoint: Endpoint<SwiftAPI.Empty, Res>, _ request: Request)
+    public func request<Res>(_ endpoint: Endpoint<SwiftAPI.Empty, Res>, _ client: Client)
         -> EventLoopFuture<(content: Res, response: ClientResponse)>
     {
-        request.performRequest(baseURL: self.baseURL, .just(url: endpoint.basePath, method: endpoint.method))
+        client.performRequest(baseURL: self.baseURL, .just(url: endpoint.basePath, method: endpoint.method))
     }
 }
 
-private extension Request {
+private extension Client {
     func performRequest<Response: Codable>(baseURL: String, _ parameters: RequestParameters) -> EventLoopFuture<(content: Response, response: ClientResponse)> {
         let fullURL = baseURL + parameters.fullPath
-        return self.client.send(parameters.method.nio, headers: HTTPHeaders(parameters.headers.map { $0 }),
+        return self.send(parameters.method.nio, headers: HTTPHeaders(parameters.headers.map { $0 }),
                          to: URI(string: fullURL))
         {
             guard let body = parameters.body else {

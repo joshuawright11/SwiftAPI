@@ -12,21 +12,21 @@ public struct API {
     }
     
     public func request<Req, Res>(_ endpoint: Endpoint<Req, Res>, _ dto: Req, _ request: Request) throws
-        -> EventLoopFuture<Res>
+        -> EventLoopFuture<(content: Res, response: ClientResponse)>
     {
         let parameters = try endpoint.parameters(dto: dto)
         return request.performRequest(baseURL: self.baseURL, parameters)
     }
     
     public func request<Res>(_ endpoint: Endpoint<SwiftAPI.Empty, Res>, _ request: Request)
-        -> EventLoopFuture<Res>
+        -> EventLoopFuture<(content: Res, response: ClientResponse)>
     {
         request.performRequest(baseURL: self.baseURL, .just(url: endpoint.basePath, method: endpoint.method))
     }
 }
 
 private extension Request {
-    func performRequest<Response: Codable>(baseURL: String, _ parameters: RequestParameters) -> EventLoopFuture<Response> {
+    func performRequest<Response: Codable>(baseURL: String, _ parameters: RequestParameters) -> EventLoopFuture<(content: Response, response: ClientResponse)> {
         let fullURL = baseURL + parameters.fullPath
         return self.client.send(parameters.method.nio, headers: HTTPHeaders(parameters.headers.map { $0 }),
                          to: URI(string: fullURL))
@@ -43,7 +43,7 @@ private extension Request {
                 throw Abort(response.status)
             }
             
-            return try response.content.decode(Response.self)
+            return (try response.content.decode(Response.self), response)
         }
     }
 }

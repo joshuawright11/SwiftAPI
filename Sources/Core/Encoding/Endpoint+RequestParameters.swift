@@ -13,7 +13,7 @@ public struct RequestParameters {
     public let method: HTTPMethod
     public let headers: [String: String]
     public let fullPath: String
-    public let body: Data?
+    public let body: (content: AnyEncodable, contentType: ContentType)?
     
     public static func just(url: String, method: HTTPMethod) -> RequestParameters {
         RequestParameters(method: method, headers: [:], fullPath: url, body: nil)
@@ -28,7 +28,7 @@ struct EncodingHelper {
 
     fileprivate init<T>(_ value: T) {
         if let value = value as? Encodable {
-            self.bodies["body"] = ErasedBody(encodable: value)
+            self.bodies["body"] = ErasedBody(content: value.toAny(), contentType: .json)
             return
         }
         Mirror(reflecting: value)
@@ -75,14 +75,14 @@ struct EncodingHelper {
             .joined(separator: "&")
     }
 
-    func getBody() throws -> Data? {
+    func getBody() throws -> (content: AnyEncodable, contentType: ContentType)? {
         guard self.bodies.count <= 1 else {
             throw SwiftAPIError(message: "Only one `@Body` attribute is allowed per request.")
         }
-
-        return try self.bodies.first?.value.toData()
+        
+        return self.bodies.first.map { ($0.value.content, $0.value.contentType) }
     }
-
+    
     func getHeaders() -> [String: String] {
         self.headers.reduce(into: [String: String]()) { dict, val in
             dict[val.key] = val.value.value

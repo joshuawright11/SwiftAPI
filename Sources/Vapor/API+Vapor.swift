@@ -31,13 +31,11 @@ private extension Request {
         return self.client.send(parameters.method.nio, headers: HTTPHeaders(parameters.headers.map { $0 }),
                          to: URI(string: fullURL))
         {
-            guard let data = parameters.body else {
+            guard let body = parameters.body else {
                 return
             }
             
-            var buffer = ByteBufferAllocator().buffer(capacity: data.count)
-            buffer.writeBytes(data)
-            $0.body = buffer
+            try $0.content.encode(body.content, as: body.contentType.httpMediaType)
         }
         .flatMapThrowing { response in
             guard response.status.isSuccess else {
@@ -53,5 +51,14 @@ private extension Request {
 private extension HTTPStatus {
     var isSuccess: Bool {
         self.code >= 200 && self.code <= 299
+    }
+}
+
+private extension ContentType {
+    var httpMediaType: HTTPMediaType {
+        switch self {
+        case .json:       return .json
+        case .urlEncoded: return .urlEncodedForm
+        }
     }
 }

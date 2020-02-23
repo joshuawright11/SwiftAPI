@@ -57,11 +57,11 @@ struct EncodingHelper {
 
     private func replacedPath(_ basePath: String) throws -> String {
         try self.paths.reduce(into: basePath) { basePath, component in
-            guard basePath.contains("{\(component.key)}") else {
-                throw SwiftAPIError(message: "Tried to encode path component '\(component.key)' but didn't find any instance of '{\(component.key)}' in the path.")
+            guard basePath.contains(":\(component.key)") else {
+                throw SwiftAPIError(message: "Tried to encode path component '\(component.key)' but didn't find any instance of ':\(component.key)' in the path.")
             }
 
-            basePath = basePath.replacingOccurrences(of: "{\(component.key)}", with: component.value.value)
+            basePath = basePath.replacingOccurrences(of: ":\(component.key)", with: component.value.value)
         }
     }
 

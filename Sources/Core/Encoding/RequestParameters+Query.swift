@@ -21,11 +21,7 @@ extension EncodingHelper {
                 components += queryComponents(fromKey: ArrayEncoding.brackets.encode(key: key), value: value)
             }
         } else if let value = value as? NSNumber {
-            if value.isBool {
-                components.append((escape(key), escape(BoolEncoding.numeric.encode(value: value.boolValue))))
-            } else {
-                components.append((escape(key), escape("\(value)")))
-            }
+            components.append((escape(key), escape("\(value)")))
         } else if let bool = value as? Bool {
             components.append((escape(key), escape(BoolEncoding.numeric.encode(value: bool))))
         } else {
@@ -64,10 +60,6 @@ public extension CharacterSet {
 
         return CharacterSet.urlQueryAllowed.subtracting(encodableDelimiters)
     }()
-}
-
-extension NSNumber {
-    fileprivate var isBool: Bool { return CFBooleanGetTypeID() == CFGetTypeID(self) }
 }
 
 /// Configures how `Array` parameters are encoded.
